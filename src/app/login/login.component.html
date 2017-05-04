@@ -1,0 +1,32 @@
+<div class="container-root">
+  <!-- タイトルバー -->
+  <md-toolbar color="primary" class="container-header whiteframe-1dp">
+    <span>{{title}}</span>
+  </md-toolbar>
+
+  <md-sidenav-container class="container-body">
+    <!-- サイドメニュー -->
+    <md-sidenav #sidenav class="sidenavi-side">
+      <!-- メニューなし -->
+    </md-sidenav>
+
+    <!-- コンテンツ -->
+    <div class="app-content">
+      <md-card class="login">
+        <md-card-content>
+          <section>
+            <md-input-container class="login-full-width">
+              <input mdInput placeholder="ユーザー名" [(ngModel)]="userName">
+            </md-input-container>
+          </section>
+          <section>
+            <md-input-container class="login-full-width">
+              <input type="password" mdInput placeholder="パスワード" [(ngModel)]="userPassword">
+            </md-input-container>
+          </section>
+          <button class="login-full-width" md-raised-button color="accent" (click)="loginStart()">ログイン</button>
+        </md-card-content>
+      </md-card>
+    </div>
+  </md-sidenav-container>
+</div>
