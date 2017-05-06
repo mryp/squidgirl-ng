@@ -1,0 +1,37 @@
+<div class="container-root">
+  <!-- ツールバー -->
+  <md-toolbar class="container-header whiteframe-1dp image-header image-z100"
+    [style.display]="isVisibleToolbar ? 'inline' : 'none'">
+    <button md-icon-button (click)="backToMenu()">
+      <i class="material-icons">arrow_back</i>
+    </button>
+    <span class="header-title">画像</span>
+    <span class="header-spacer"></span>
+    <button md-icon-button [mdMenuTriggerFor]="menu">
+      <i class="material-icons">more_vert</i>
+    </button>
+
+    <!-- メニュー -->
+    <md-menu #menu="mdMenu">
+      <button md-menu-item>
+        <md-icon>thumb_up</md-icon>
+        <span>気に入った</span>
+      </button>
+      <button md-menu-item>
+        <md-icon>thumb_down</md-icon>
+        <span>いまいち</span>
+      </button>
+      <button md-menu-item>
+        <md-icon>find_in_page</md-icon>
+        <span>ページ移動</span>
+      </button>
+    </md-menu>
+  </md-toolbar>
+
+  <!-- 画像表示 -->
+  <div class="container-body image-z0" id="container-body">
+    <div class="app-content">
+      <img class="image-main" src="assets/img/dummy_1.jpg" (click)="clickImage($event)" />
+    </div>
+  </div>
+</div>

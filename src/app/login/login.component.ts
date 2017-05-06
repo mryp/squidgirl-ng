@@ -29,6 +29,6 @@ export class LoginComponent implements OnInit {
 
   loginStart() {
     this.loginService.createLoginToken(this.userName, this.userPassword);
-    this.router.navigate(["/list"]);
+    this.router.navigate(['/list', { outlets: { content: 'filelist' } }]);
   }
 }

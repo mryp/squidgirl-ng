@@ -31,6 +31,10 @@ md-card {
   text-overflow:ellipsis;
 }
 
+.header-spacer {
+  flex: 1 1 auto;
+}
+
 .container-body {
   background : none;
   flex: 1;

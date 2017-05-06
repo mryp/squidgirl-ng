@@ -1,17 +1,38 @@
 <div class="container-root">
   <!-- タイトルバー -->
   <md-toolbar color="primary" class="container-header whiteframe-1dp">
+    <button md-icon-button (click)="sideNaviToggle()">
+      <i class="material-icons">{{menuIcon}}</i>
+    </button>
     <span>{{title}}</span>
   </md-toolbar>
 
   <md-sidenav-container class="container-body">
     <!-- サイドメニュー -->
-    <md-sidenav #sidenav class="sidenavi-side">
-      <!-- メニューなし -->
+    <md-sidenav #sidenav class="sidenavi-side"
+      (open-start)="sideNaviOpenStart()"
+      (close-start)="sideNaviCloseStart()">
+      <md-nav-list class="sidenavi-itemlist">
+        <md-list-item *ngFor="let item of categoryLinkList">
+          <md-icon md-list-icon>{{item.icon}}</md-icon>
+          <a md-line (click)="jumpPage(item.title, item.link, item.content)">{{item.title}}</a>
+        </md-list-item>
+        <md-divider></md-divider>
+        <md-list-item *ngFor="let item of reactionLinkList">
+          <md-icon md-list-icon>{{item.icon}}</md-icon>
+          <a md-line (click)="jumpPage(item.title, item.link, item.content)">{{item.title}}</a>
+        </md-list-item>
+        <md-divider></md-divider>
+        <md-list-item *ngFor="let item of otherLinkList">
+          <md-icon md-list-icon>{{item.icon}}</md-icon>
+          <a md-line (click)="jumpPage(item.title, item.link, item.content)">{{item.title}}</a>
+        </md-list-item>
+      </md-nav-list>
     </md-sidenav>
 
     <!-- コンテンツ -->
     <div class="app-content">
+      <router-outlet name='content'></router-outlet>
     </div>
   </md-sidenav-container>
 </div>

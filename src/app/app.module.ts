@@ -11,18 +11,31 @@ import { AppComponent } from './app.component';
 import { ListComponent } from './list/list.component';
 import { LoginService } from './login.service';
 import { LoginComponent } from './login/login.component';
+import { FilelistComponent } from './filelist/filelist.component';
+import { SettingComponent } from './setting/setting.component';
+import { ImageComponent } from './image/image.component';
 
 //ルーター
 const appRoutes = [
   { path: "", component:LoginComponent },
-  { path: "list", component:ListComponent },
+  { path: 'list',
+    component:ListComponent,
+    children: [
+      { path: 'filelist', component: FilelistComponent, outlet: 'content' },
+      { path: 'setting', component: SettingComponent, outlet: 'content' },
+    ]
+  },
+  { path: "image", component:ImageComponent },
 ]
 
 @NgModule({
   declarations: [
     AppComponent,
     ListComponent,
-    LoginComponent
+    LoginComponent,
+    FilelistComponent,
+    SettingComponent,
+    ImageComponent
   ],
   imports: [
     BrowserModule,
