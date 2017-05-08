@@ -14,6 +14,7 @@ import { LoginComponent } from './login/login.component';
 import { FilelistComponent } from './filelist/filelist.component';
 import { SettingComponent } from './setting/setting.component';
 import { ImageComponent } from './image/image.component';
+import { FileService } from './file.service';
 
 //ルーター
 const appRoutes = [
@@ -35,7 +36,7 @@ const appRoutes = [
     LoginComponent,
     FilelistComponent,
     SettingComponent,
-    ImageComponent
+    ImageComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,6 +48,7 @@ const appRoutes = [
   ],
   providers: [
     LoginService,
+    FileService,
   ],
   bootstrap: [AppComponent]
 })

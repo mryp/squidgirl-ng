@@ -25,6 +25,9 @@
             </md-input-container>
           </section>
           <button class="login-full-width" md-raised-button color="accent" (click)="loginStart()">ログイン</button>
+          <div *ngIf="isShowError">
+            <p>{{errorMessage}}</p>
+          </div>
         </md-card-content>
       </md-card>
     </div>
