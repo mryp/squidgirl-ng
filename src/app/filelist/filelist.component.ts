@@ -11,13 +11,8 @@ import { FileService } from "../file.service"
 })
 export class FilelistComponent implements OnInit {
   listColumn = 3;
-  listItemWidthMin = 120;
-  itemList = [
-    {title: "三国志1ああいうえおあいうえお", file:"sangokushi1.zip", image: "assets/img/dummy_1.jpg"},
-    {title: "三国志2", file:"sangokushi2.zip", image: "assets/img/dummy_2.jpg"},
-    {title: "三国志3", file:"sangokushi3.zip", image: "assets/img/dummy_3.jpg"},
-    {title: "三国志4", file:"sangokushi4.zip", image: "assets/img/dummy_4.jpg"},
-  ];
+  listItemWidthMin = 160;
+  itemList = [];
 
   constructor(
     private fileService:FileService,
@@ -35,7 +30,7 @@ export class FilelistComponent implements OnInit {
   }
 
   showFolderList(hash:string) {
-    this.fileService.sendFileList(hash,
+    this.fileService.postFileList(hash,
       (responce, error) => {
         if (responce != null) {
           this.setSuccessStory(responce);
@@ -48,8 +43,22 @@ export class FilelistComponent implements OnInit {
 
   setSuccessStory(responce:Response) {
     let list = responce.json();
+    this.itemList = [];
     for (let item of list) {
-      console.log(item.name);
+      //タイトルだけ先にセットする
+      let newItem = {name: item.name, image:""};
+      this.itemList.push(newItem);
+
+      this.fileService.getThumbnail(item.hash,
+        (imageUrl, error) => {
+          if (responce != null) {
+            //サムネイル画像は非同期で取得する
+            newItem.image = imageUrl;
+          } else if (error != null) {
+            this.setErrorStory(error);
+          }
+        }
+      );
     }
   }
 

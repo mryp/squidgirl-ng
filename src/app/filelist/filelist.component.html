@@ -2,8 +2,8 @@
   <md-grid-list cols="{{listColumn}}" rowHeight="2:3" gutterSize="4px">
     <md-grid-tile *ngFor="let item of itemList">
       <div (click)="clickListItem(item.file)">
-        <img src="{{item.image}}" alt="{{item.title}}" class="grid-image" />
-        <md-grid-tile-footer class="grid-title">{{item.title}}</md-grid-tile-footer>
+        <img src="{{item.image}}" alt="{{item.name}}" class="grid-image" />
+        <md-grid-tile-footer class="grid-title">{{item.name}}</md-grid-tile-footer>
       </div>
     </md-grid-tile>
   </md-grid-list>
