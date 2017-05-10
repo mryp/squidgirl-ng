@@ -10,13 +10,13 @@ import { LoginService } from "../login.service"
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
-  title = 'ファイル一覧';
+  title = 'フォルダ';
   menuIcon = "menu";
   @ViewChild('sidenav') sidenav: MdSidenav; //#sidenav オブジェクトを読み込むため設定
 
   categoryLinkList = [
     {
-      title: 'ルートフォルダ',
+      title: 'フォルダ',
       link: "/list",
       content: "filelist",
       icon: "folder_open",

@@ -1,8 +1,22 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Response } from "@angular/http";
 import { LoginService } from "../login.service"
 import { FileService } from "../file.service"
+
+class FileListItem {
+  hash: string;
+  name: string;
+  image: string;
+  isdir: boolean;
+
+  constructor() {
+    this.hash = "";
+    this.name = "";
+    this.image = "";
+    this.isdir = false;
+  }
+}
 
 @Component({
   selector: 'app-filelist',
@@ -10,9 +24,12 @@ import { FileService } from "../file.service"
   styleUrls: ['./filelist.component.css']
 })
 export class FilelistComponent implements OnInit {
+  title = "";
+  allCount = 0;
   listColumn = 3;
   listItemWidthMin = 160;
   itemList = [];
+  upFolderItem: FileListItem = null;
 
   constructor(
     private fileService:FileService,
@@ -42,11 +59,21 @@ export class FilelistComponent implements OnInit {
   }
 
   setSuccessStory(responce:Response) {
-    let list = responce.json();
+    let json = responce.json();
+    this.title = json.name;
+    this.allCount = json.allcount;
+
     this.itemList = [];
-    for (let item of list) {
+    for (let item of json.files) {
       //タイトルだけ先にセットする
-      let newItem = {name: item.name, image:""};
+      if (item.name == "..") {
+        this.upFolderItem = item;
+        continue;
+      }
+      let newItem = new FileListItem();
+      newItem.hash = item.hash;
+      newItem.name = item.name;
+      newItem.isdir = item.isdir;
       this.itemList.push(newItem);
 
       this.fileService.getThumbnail(item.hash,
@@ -69,8 +96,21 @@ export class FilelistComponent implements OnInit {
     }
   }
 
-  clickListItem(file:string) {
-    console.log("clickListItem file=" + file);
-    this.router.navigate(["/image"]);
+  clickListItem(item: FileListItem) {
+    console.log("clickListItem name=" + item.name);
+    if (item.isdir) {
+      console.log("clickListItem folder!");
+      this.showFolderList(item.hash);
+    }
+    else {
+      console.log("clickListItem file!")
+    }
+    //this.router.navigate(["/image"]);
+  }
+
+  onClickUpward() {
+    if (this.upFolderItem != null) {
+      this.clickListItem(this.upFolderItem);
+    }
   }
 }

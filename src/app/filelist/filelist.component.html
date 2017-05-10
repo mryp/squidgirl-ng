@@ -1,10 +1,19 @@
 <div class="grid-root">
-  <md-grid-list cols="{{listColumn}}" rowHeight="2:3" gutterSize="4px">
+  <div class="grid-heder">
+    <button md-icon-button (click)="onClickUpward()">
+      <i class="material-icons">arrow_upward</i>
+    </button>
+    <span>{{title}}({{allCount}})</span>
+  </div>
+  <md-grid-list cols="{{listColumn}}" rowHeight="3:4" gutterSize="4px">
     <md-grid-tile *ngFor="let item of itemList">
-      <div (click)="clickListItem(item.file)">
+      <div class="grid-tile" (click)="clickListItem(item)">
         <img src="{{item.image}}" alt="{{item.name}}" class="grid-image" />
         <md-grid-tile-footer class="grid-title">{{item.name}}</md-grid-tile-footer>
       </div>
     </md-grid-tile>
   </md-grid-list>
+  <div class="grid-footer">
+    <p>{{title}}</p>
+  </div>
 </div>
