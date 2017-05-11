@@ -31,15 +31,17 @@ export class LoginComponent implements OnInit {
   }
 
   loginStart() {
-    this.loginService.sendLogin(this.userName, this.userPassword,
-      (token, error) => {
-        if (token != "") {
+    this.loginService.postLogin(this.userName, this.userPassword).subscribe(
+      res => {
+        let login = res.json();
+        if (login.token != "") {
           this.router.navigate(['/list', { outlets: { content: 'filelist' } }]);
-        } else if (error != null) {
-          this.setErrorMessage(error.status + ":" + error.statusText);
         } else {
           this.setErrorMessage("トークン取得エラー");
         }
+      },
+      error => {
+        this.setErrorMessage(error.status + ":" + error.statusText);
       }
     );
   }

@@ -47,13 +47,12 @@ export class FilelistComponent implements OnInit {
   }
 
   showFolderList(hash:string) {
-    this.fileService.postFileList(hash,
-      (responce, error) => {
-        if (responce != null) {
-          this.setSuccessStory(responce);
-        } else if (error != null) {
-          this.setErrorStory(error);
-        }
+    this.fileService.postFileList(hash).subscribe(
+      res => {
+        this.setSuccessStory(res);
+      },
+      error => {
+        this.setErrorStory(error);
       }
     );
   }
@@ -76,14 +75,12 @@ export class FilelistComponent implements OnInit {
       newItem.isdir = item.isdir;
       this.itemList.push(newItem);
 
-      this.fileService.getThumbnail(item.hash,
-        (imageUrl, error) => {
-          if (responce != null) {
-            //サムネイル画像は非同期で取得する
-            newItem.image = imageUrl;
-          } else if (error != null) {
-            this.setErrorStory(error);
-          }
+      this.fileService.getThumbnail(item.hash).subscribe(
+        imageUrl => {
+          newItem.image = imageUrl;
+        },
+        error => {
+          this.setErrorStory(error);
         }
       );
     }

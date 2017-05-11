@@ -1,19 +1,26 @@
-<div class="grid-root">
-  <div class="grid-heder">
+<md-card class="grid-heder">
+  <md-card-content>
     <button md-icon-button (click)="onClickUpward()">
       <i class="material-icons">arrow_upward</i>
     </button>
     <span>{{title}}({{allCount}})</span>
-  </div>
-  <md-grid-list cols="{{listColumn}}" rowHeight="3:4" gutterSize="4px">
-    <md-grid-tile *ngFor="let item of itemList">
-      <div class="grid-tile" (click)="clickListItem(item)">
-        <img src="{{item.image}}" alt="{{item.name}}" class="grid-image" />
-        <md-grid-tile-footer class="grid-title">{{item.name}}</md-grid-tile-footer>
+  </md-card-content>
+</md-card>
+<div class="grid-content">
+  <md-grid-list cols="{{listColumn}}" rowHeight="3:4" gutterSize="8px">
+    <md-grid-tile *ngFor="let item of itemList" class="shadow-card">
+      <div [ngClass]="item.isdir ? 'grid-tile-folder' : 'grid-tile'" (click)="clickListItem(item)">
+        <img *ngIf="item.image!=''" src="{{item.image}}" title="{{item.name}}" alt="{{item.name}}" class="grid-image" />
+        <span *ngIf="item.image==''" class="grid-text">{{item.name}}</span>
       </div>
     </md-grid-tile>
   </md-grid-list>
-  <div class="grid-footer">
-    <p>{{title}}</p>
-  </div>
 </div>
+<md-card class="grid-footer">
+  <md-card-content>
+    <button md-icon-button (click)="onClickUpward()">
+      <i class="material-icons">arrow_upward</i>
+    </button>
+    <span>フッター</span>
+  </md-card-content>
+</md-card>

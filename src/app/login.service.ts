@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from "@angular/http";
+import { Observable } from 'rxjs/Observable';
 
 import { environment } from '../environments/environment';
 
@@ -23,24 +24,17 @@ export class LoginService {
   }
 
   /**
-   * ログイントークンを取得する
+   * ユーザー情報をポストしてログインする
    */
-  sendLogin(userName:string, password:string, callback:(token: string, error: any ) => void) {
+  postLogin(userName:string, password:string): Observable<Response> {
     let postData = "username=" + userName + "&password=" + password;
     let headers = new Headers({ "Content-Type": "application/x-www-form-urlencoded" });
     let options = new RequestOptions({headers: headers});
-    let httpPostObservable = this.http.post(
-      this.getApiUrl(Const.API_LOGIN), postData, options);
-    httpPostObservable.subscribe(
+    return this.http.post(this.getApiUrl(Const.API_LOGIN), postData, options).map(
       res => {
-        console.log(res.text());
         let login = res.json();
         this.setToken(login.token);
-        callback(login.token, null);
-      },
-      error => {
-        console.error(error.status + ":" + error.statusText);
-        callback("", error);
+        return res;
       }
     );
   }

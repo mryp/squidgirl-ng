@@ -1,5 +1,18 @@
-.grid-root {
-  margin: 4px;
+.grid-content {
+  margin: 8px;
+}
+
+.grid-heder {
+  margin: 8px;
+  padding: 4px;
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.grid-footer {
+  margin: 8px;
+  padding: 4px;
 }
 
 .grid-image {
@@ -14,8 +27,19 @@
   background-color: #FFFFFF;
 }
 
+.grid-tile-folder {
+  width: 100%;
+  height: 100%;
+  background-color: #FFE79B;
+}
+
 .grid-title {
   white-space: nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
+}
+
+.grid-text {
+  padding: 8px;
+  display: flex;
 }

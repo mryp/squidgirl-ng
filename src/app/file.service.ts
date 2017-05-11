@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from "@angular/http";
 import { DomSanitizer } from '@angular/platform-browser';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { LoginService } from "./login.service"
 import { environment } from '../environments/environment';
@@ -41,45 +43,36 @@ export class FileService {
   }
 
   /**
-   * ログイントークンを取得する
+   * ファイル一覧を取得する
    */
-  postFileList(hash:string, callback:(response: Response, error: any ) => void) {
+  postFileList(hash:string): Observable<Response> {
     let postData = "hash=" + hash;
     let headers = this.createPostApiHeader();
     let options = new RequestOptions({headers: headers});
-    let httpPostObservable = this.http.post(
-      this.getApiUrl(Const.API_FILE_LIST), postData, options);
-    httpPostObservable.subscribe(
+    return this.http.post(this.getApiUrl(Const.API_FILE_LIST), postData, options).map(
       res => {
-        console.log(res.text());
-        callback(res, null);
-      },
-      error => {
-        console.error(error.status + ":" + error.statusText);
-        callback(null, error);
+        return res;
       }
     );
   }
 
-  getThumbnail(hash:string, callback:(imageUrl: any, error: any ) => void): string {
+  /**
+   * 指定したファイルのサムネイル画像を取得する
+   */
+  getThumbnail(hash:string): Observable<string> {
     let url = this.getApiUrl(Const.API_THUMBNAIL) + "/" + hash;
     let headers = this.createGetApiHeader();
     let options = new RequestOptions({headers: headers});
-    let httpObservable = this.http.get(url, options);
-    httpObservable.subscribe(
+    return this.http.get(url, options).map(
       res => {
-        let imageUrl = "data:image/jpeg;base64," + res.text();
-        //let secureUrl = this.sanitizer.bypassSecurityTrustUrl(imageUrl);
-        //console.log(secureUrl);
-        callback(imageUrl, null);
-      },
-      error => {
-        console.error(error.status + ":" + error.statusText);
-        callback(null, error);
-      }
-    );
+        if (res.text() == "") {
+          return "";
+        }
 
-    return "";
+        let imageUrl = "data:image/jpeg;base64," + res.text();
+        return imageUrl;
+      },
+    );
   }
 
 }
