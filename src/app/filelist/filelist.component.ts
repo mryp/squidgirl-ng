@@ -25,11 +25,19 @@ class FileListItem {
 })
 export class FilelistComponent implements OnInit {
   title = "";
-  allCount = 0;
-  listColumn = 3;
-  listItemWidthMin = 160;
+  listColumn = 2;         //列数（画面サイズ・画像サイズから計算する）
+  listItemWidthMin = 160; //画像の横幅
+  listItemCountMax = 10;  //1ページに表示する最大個数
+
   itemList = [];
   upFolderItem: FileListItem = null;
+
+  requestHash = "";
+  requestOffset = 0;
+  responseAllCount = 0;
+  responseFileCount = 0;
+  nowPageCount = 0;
+  totalPageCount = 0;
 
   constructor(
     private fileService:FileService,
@@ -38,7 +46,7 @@ export class FilelistComponent implements OnInit {
 
   ngOnInit() {
     this.onScreenResize();
-    this.showFolderList("");
+    this.showFolderList("", 0);
   }
 
   @HostListener("window:resize")
@@ -46,8 +54,11 @@ export class FilelistComponent implements OnInit {
     this.listColumn = innerWidth / this.listItemWidthMin;
   }
 
-  showFolderList(hash:string) {
-    this.fileService.postFileList(hash).subscribe(
+  showFolderList(hash:string, offset:number) {
+    this.requestHash = hash;
+    this.requestOffset = offset;
+    this.itemList = [];
+    this.fileService.postFileList(hash, offset, this.listItemCountMax).subscribe(
       res => {
         this.setSuccessStory(res);
       },
@@ -60,9 +71,11 @@ export class FilelistComponent implements OnInit {
   setSuccessStory(responce:Response) {
     let json = responce.json();
     this.title = json.name;
-    this.allCount = json.allcount;
+    this.responseAllCount = json.allcount;
+    this.responseFileCount = json.count;
+    this.nowPageCount = Math.ceil(this.requestOffset / this.listItemCountMax) + 1;
+    this.totalPageCount = Math.ceil(this.responseAllCount / this.listItemCountMax);
 
-    this.itemList = [];
     for (let item of json.files) {
       //タイトルだけ先にセットする
       if (item.name == "..") {
@@ -97,7 +110,7 @@ export class FilelistComponent implements OnInit {
     console.log("clickListItem name=" + item.name);
     if (item.isdir) {
       console.log("clickListItem folder!");
-      this.showFolderList(item.hash);
+      this.showFolderList(item.hash, 0);
     }
     else {
       console.log("clickListItem file!")
@@ -105,9 +118,50 @@ export class FilelistComponent implements OnInit {
     //this.router.navigate(["/image"]);
   }
 
-  onClickUpward() {
+  jumpUpFolder() {
     if (this.upFolderItem != null) {
       this.clickListItem(this.upFolderItem);
     }
+  }
+
+  jumpFirstPage() {
+    if (this.requestOffset == 0) {
+      return;
+    }
+    this.requestOffset = 0;
+    this.showFolderList(this.requestHash, this.requestOffset);
+  }
+
+  jumpPrevPage() {
+    if (this.requestOffset == 0) {
+      return;
+    }
+    else if (this.requestOffset < this.listItemCountMax) {
+      this.requestOffset = 0;
+    }
+    else {
+      this.requestOffset -= this.listItemCountMax;
+    }
+    this.showFolderList(this.requestHash, this.requestOffset);
+  }
+
+  jumpNextPage() {
+    if (this.nowPageCount == this.totalPageCount) {
+      return;
+    }
+    this.requestOffset += this.listItemCountMax;
+    this.showFolderList(this.requestHash, this.requestOffset);
+  }
+
+  jumpLastPage() {
+    if (this.nowPageCount == this.totalPageCount) {
+      return;
+    }
+    this.requestOffset = (this.totalPageCount - 1) * this.listItemCountMax;
+    this.showFolderList(this.requestHash, this.requestOffset);
+  }
+
+  showFolderMenu() {
+    //未実装
   }
 }

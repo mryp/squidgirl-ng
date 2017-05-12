@@ -1,9 +1,16 @@
 <md-card class="grid-heder">
-  <md-card-content>
-    <button md-icon-button (click)="onClickUpward()">
-      <i class="material-icons">arrow_upward</i>
-    </button>
-    <span>{{title}}({{allCount}})</span>
+  <md-card-content class="flex-content">
+    <div class="block-left">
+      <button md-icon-button (click)="jumpUpFolder()">
+        <i class="material-icons">arrow_upward</i>
+      </button>
+      <span>{{title}}</span>
+    </div>
+    <div class="block-right">
+      <button md-icon-button (click)="showFolderMenu()">
+        <i class="material-icons">more_vert</i>
+      </button>
+    </div>
   </md-card-content>
 </md-card>
 <div class="grid-content">
@@ -18,9 +25,20 @@
 </div>
 <md-card class="grid-footer">
   <md-card-content>
-    <button md-icon-button (click)="onClickUpward()">
-      <i class="material-icons">arrow_upward</i>
-    </button>
-    <span>フッター</span>
+    <div class="block-center">
+      <button md-icon-button (click)="jumpFirstPage()">
+        <i class="material-icons">first_page</i>
+      </button>
+      <button md-icon-button (click)="jumpPrevPage()">
+        <i class="material-icons">chevron_left</i>
+      </button>
+      <span>{{nowPageCount}}/{{totalPageCount}}</span>
+      <button md-icon-button (click)="jumpNextPage()">
+        <i class="material-icons">chevron_right</i>
+      </button>
+      <button md-icon-button (click)="jumpLastPage()">
+        <i class="material-icons">last_page</i>
+      </button>
+    </div>
   </md-card-content>
 </md-card>

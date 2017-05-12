@@ -45,8 +45,8 @@ export class FileService {
   /**
    * ファイル一覧を取得する
    */
-  postFileList(hash:string): Observable<Response> {
-    let postData = "hash=" + hash;
+  postFileList(hash:string, offset:number, limit:number): Observable<Response> {
+    let postData = "hash=" + hash + "&offset=" + offset + "&limit=" + limit;
     let headers = this.createPostApiHeader();
     let options = new RequestOptions({headers: headers});
     return this.http.post(this.getApiUrl(Const.API_FILE_LIST), postData, options).map(
