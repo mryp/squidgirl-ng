@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Response } from "@angular/http";
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
@@ -11,6 +12,7 @@ export class PageService {
   //--------------------------------------
   hash = ""
   index = 0;
+  reaction = 0;
   maxCount = 0;
   maxHeight = 0;
   maxWidth = 0
@@ -21,9 +23,10 @@ export class PageService {
     private fileService:FileService
   ) { }
 
-  setBook(hash: string, maxCount: number) {
+  setBook(hash: string, maxCount: number, index: number) {
     this.hash = hash;
     this.maxCount = maxCount;
+    this.index = index;
   }
 
   setImageSize(height:number, width:number) {
@@ -31,8 +34,12 @@ export class PageService {
     this.maxWidth = width;
   }
 
+  setReaction(reaction: number) {
+    this.reaction = reaction;
+  }
+
   loadPage() {
-    this.index = 0;
+    //this.index = 0;
   }
 
   setNextPage(): boolean {
@@ -55,5 +62,9 @@ export class PageService {
 
   getPage(): Observable<string> {
     return this.fileService.getPageImage(this.hash, this.index, this.maxHeight, this.maxWidth);
+  }
+
+  savePage(): Observable<Response> {
+    return this.fileService.postSaveBook(this.hash, this.index, this.reaction)
   }
 }

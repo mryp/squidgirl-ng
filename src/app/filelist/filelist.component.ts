@@ -10,6 +10,7 @@ class FileListItem {
   image: string;
   isdir: boolean;
   page: number;
+  index: number;
 
   constructor() {
     this.hash = "";
@@ -17,6 +18,7 @@ class FileListItem {
     this.image = "";
     this.isdir = false;
     this.page = 0;
+    this.index = 0;
   }
 }
 
@@ -90,6 +92,7 @@ export class FilelistComponent implements OnInit {
       newItem.name = item.name;
       newItem.isdir = item.isdir;
       newItem.page = item.page;
+      newItem.index = item.index;
       this.itemList.push(newItem);
 
       this.fileService.getThumbnail(item.hash).subscribe(
@@ -117,8 +120,8 @@ export class FilelistComponent implements OnInit {
       this.showFolderList(item.hash, 0);
     }
     else {
-      console.log("clickListItem file!")
-      this.pageService.setBook(item.hash, item.page);
+      console.log("clickListItem file! index=" + item.index)
+      this.pageService.setBook(item.hash, item.page, item.index);
       this.router.navigate(["/image"]);
     }
   }

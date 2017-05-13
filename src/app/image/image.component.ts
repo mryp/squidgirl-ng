@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { PageService } from "../page.service"
@@ -8,7 +8,7 @@ import { PageService } from "../page.service"
   templateUrl: './image.component.html',
   styleUrls: ['./image.component.css']
 })
-export class ImageComponent implements OnInit {
+export class ImageComponent implements OnInit, OnDestroy {
   isVisibleToolbar = false;
   pageImage = "";
 
@@ -21,6 +21,18 @@ export class ImageComponent implements OnInit {
     this.onScreenResize();
     this.pageService.loadPage();
     this.showImage();
+  }
+
+  ngOnDestroy() {
+    console.log("ngOnDestroy");
+    this.pageService.savePage().subscribe(
+      response => {
+        console.log("ok:" + response.json())
+      },
+      error => {
+        console.log(error.status + ":" + error.statusText);
+      }
+    );
   }
 
   @HostListener("window:resize")

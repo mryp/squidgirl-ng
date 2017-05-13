@@ -9,8 +9,9 @@ import { environment } from '../environments/environment';
 
 namespace Const{
   export const API_FILE_LIST = "api/filelist";
-  export const API_THUMBNAIL = "api/thumbnailbase64";
+  export const API_THUMBNAIL = "api/thumbnail";
   export const API_PAGE = "api/page";
+  export const API_SAVE_BOOK = "api/savebook";
 }
 
 @Injectable()
@@ -61,7 +62,7 @@ export class FileService {
    * 指定したファイルのサムネイル画像を取得する
    */
   getThumbnail(hash:string): Observable<string> {
-    let url = this.getApiUrl(Const.API_THUMBNAIL) + "/" + hash;
+    let url = this.getApiUrl(Const.API_THUMBNAIL) + "/" + hash + "?base64=true";
     let headers = this.createGetApiHeader();
     let options = new RequestOptions({headers: headers});
     return this.http.get(url, options).map(
@@ -96,4 +97,14 @@ export class FileService {
     );
   }
 
+  postSaveBook(hash:string, index:number, reaction:number): Observable<Response> {
+    let postData = "hash=" + hash + "&index=" + index + "&reaction=" + reaction;
+    let headers = this.createPostApiHeader();
+    let options = new RequestOptions({headers: headers});
+    return this.http.post(this.getApiUrl(Const.API_SAVE_BOOK), postData, options).map(
+      res => {
+        return res;
+      }
+    );
+  }
 }
