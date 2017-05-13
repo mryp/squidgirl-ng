@@ -1,12 +1,14 @@
 <md-card class="grid-heder">
-  <md-card-content>
-    <div class="block-left">
+  <md-card-content div class="flex-block">
+    <div>
       <button md-icon-button (click)="jumpUpFolder()">
         <md-icon>arrow_upward</md-icon>
       </button>
+    </div>
+    <div class="flex-cell-text">
       <span>{{title}}</span>
     </div>
-    <div class="block-right">
+    <div>
       <button md-icon-button [mdMenuTriggerFor]="menu">
         <md-icon>more_vert</md-icon>
       </button>

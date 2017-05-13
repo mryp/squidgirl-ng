@@ -5,9 +5,6 @@
 .grid-heder {
   margin: 8px;
   padding: 4px;
-  white-space: nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
 }
 
 .grid-footer {
@@ -64,4 +61,16 @@
 
 .block-center {
   text-align: center;
+}
+
+.flex-block {
+  display: flex;
+  align-items: center;
+}
+
+.flex-cell-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
