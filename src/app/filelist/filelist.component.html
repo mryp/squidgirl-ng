@@ -1,15 +1,33 @@
 <md-card class="grid-heder">
-  <md-card-content class="flex-content">
+  <md-card-content>
     <div class="block-left">
       <button md-icon-button (click)="jumpUpFolder()">
-        <i class="material-icons">arrow_upward</i>
+        <md-icon>arrow_upward</md-icon>
       </button>
       <span>{{title}}</span>
     </div>
     <div class="block-right">
-      <button md-icon-button (click)="showFolderMenu()">
-        <i class="material-icons">more_vert</i>
+      <button md-icon-button [mdMenuTriggerFor]="menu">
+        <md-icon>more_vert</md-icon>
       </button>
+      <md-menu #menu="mdMenu">
+        <button md-menu-item>
+          <md-icon>folder_special</md-icon>
+          <span>お気に入り</span>
+        </button>
+        <button md-menu-item>
+          <md-icon>sort</md-icon>
+          <span>並び替え</span>
+        </button>
+        <button md-menu-item>
+          <md-icon>photo_size_select_large</md-icon>
+          <span>画像サイズ変更</span>
+        </button>
+        <button md-menu-item>
+          <md-icon>view_module</md-icon>
+          <span>取得個数変更</span>
+        </button>
+      </md-menu>
     </div>
   </md-card-content>
 </md-card>
@@ -18,7 +36,12 @@
     <md-grid-tile *ngFor="let item of itemList" class="shadow-card">
       <div [ngClass]="item.isdir ? 'grid-tile-folder' : 'grid-tile'" (click)="clickListItem(item)">
         <img *ngIf="item.image!=''" src="{{item.image}}" title="{{item.name}}" alt="{{item.name}}" class="grid-image" />
-        <span *ngIf="item.image==''" class="grid-text">{{item.name}}</span>
+        <div *ngIf="item.image==''">
+          <md-icon class="grid-text-icon">{{item.isdir ? 'folder' : 'error'}}</md-icon>
+          <span class="grid-text">
+            {{item.name}}
+          </span>
+        </div>
       </div>
     </md-grid-tile>
   </md-grid-list>
@@ -27,17 +50,17 @@
   <md-card-content>
     <div class="block-center">
       <button md-icon-button (click)="jumpFirstPage()">
-        <i class="material-icons">first_page</i>
+        <md-icon>first_page</md-icon>
       </button>
       <button md-icon-button (click)="jumpPrevPage()">
-        <i class="material-icons">chevron_left</i>
+        <md-icon>chevron_left</md-icon>
       </button>
       <span>{{nowPageCount}}/{{totalPageCount}}</span>
       <button md-icon-button (click)="jumpNextPage()">
-        <i class="material-icons">chevron_right</i>
+        <md-icon>chevron_right</md-icon>
       </button>
       <button md-icon-button (click)="jumpLastPage()">
-        <i class="material-icons">last_page</i>
+        <md-icon>last_page</md-icon>
       </button>
     </div>
   </md-card-content>

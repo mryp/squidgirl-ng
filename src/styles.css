@@ -59,12 +59,3 @@ md-card {
 .sidenavi-itemlist {
   padding: 16px 0px 0px 0px;
 }
-
-.flex-content {
-  display: flex;
-}
-
-.flex-right {
-  text-align: right;
-  margin-right: auto;
-}
