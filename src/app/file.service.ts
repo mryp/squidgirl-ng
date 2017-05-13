@@ -10,6 +10,7 @@ import { environment } from '../environments/environment';
 namespace Const{
   export const API_FILE_LIST = "api/filelist";
   export const API_THUMBNAIL = "api/thumbnailbase64";
+  export const API_PAGE = "api/page";
 }
 
 @Injectable()
@@ -61,6 +62,26 @@ export class FileService {
    */
   getThumbnail(hash:string): Observable<string> {
     let url = this.getApiUrl(Const.API_THUMBNAIL) + "/" + hash;
+    let headers = this.createGetApiHeader();
+    let options = new RequestOptions({headers: headers});
+    return this.http.get(url, options).map(
+      res => {
+        if (res.text() == "") {
+          return "";
+        }
+
+        let imageUrl = "data:image/jpeg;base64," + res.text();
+        return imageUrl;
+      },
+    );
+  }
+
+  /**
+   * 指定したファイル内のページ画像を取得する
+   */
+  getPageImage(hash:string, index:number, maxHeight:number, maxWidth:number): Observable<string> {
+    let url = this.getApiUrl(Const.API_PAGE) + "/" + hash
+      + "?index="+index+"&maxheight="+maxHeight+"&maxwidth="+maxWidth+"&base64=true";
     let headers = this.createGetApiHeader();
     let options = new RequestOptions({headers: headers});
     return this.http.get(url, options).map(

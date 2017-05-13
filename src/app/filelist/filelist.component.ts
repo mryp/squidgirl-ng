@@ -1,20 +1,22 @@
 import { Component, OnInit, HostListener, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Response } from "@angular/http";
-import { LoginService } from "../login.service"
 import { FileService } from "../file.service"
+import { PageService } from "../page.service"
 
 class FileListItem {
   hash: string;
   name: string;
   image: string;
   isdir: boolean;
+  page: number;
 
   constructor() {
     this.hash = "";
     this.name = "";
     this.image = "";
     this.isdir = false;
+    this.page = 0;
   }
 }
 
@@ -41,6 +43,7 @@ export class FilelistComponent implements OnInit {
 
   constructor(
     private fileService:FileService,
+    private pageService:PageService,
     private router: Router
   ) { }
 
@@ -60,15 +63,15 @@ export class FilelistComponent implements OnInit {
     this.itemList = [];
     this.fileService.postFileList(hash, offset, this.listItemCountMax).subscribe(
       res => {
-        this.setSuccessStory(res);
+        this.setSuccessPost(res);
       },
       error => {
-        this.setErrorStory(error);
+        this.setErrorPost(error);
       }
     );
   }
 
-  setSuccessStory(responce:Response) {
+  setSuccessPost(responce:Response) {
     let json = responce.json();
     this.title = json.name;
     this.responseAllCount = json.allcount;
@@ -86,6 +89,7 @@ export class FilelistComponent implements OnInit {
       newItem.hash = item.hash;
       newItem.name = item.name;
       newItem.isdir = item.isdir;
+      newItem.page = item.page;
       this.itemList.push(newItem);
 
       this.fileService.getThumbnail(item.hash).subscribe(
@@ -93,13 +97,13 @@ export class FilelistComponent implements OnInit {
           newItem.image = imageUrl;
         },
         error => {
-          this.setErrorStory(error);
+          this.setErrorPost(error);
         }
       );
     }
   }
 
-  setErrorStory(error:any) {
+  setErrorPost(error:any) {
     let errorText = error.status + ":" + error.statusText;
     if (error.status == 0 || error.statusText == "") {
       errorText = "サーバー接続エラー";
@@ -114,8 +118,9 @@ export class FilelistComponent implements OnInit {
     }
     else {
       console.log("clickListItem file!")
+      this.pageService.setBook(item.hash, item.page);
+      this.router.navigate(["/image"]);
     }
-    //this.router.navigate(["/image"]);
   }
 
   jumpUpFolder() {
