@@ -89,9 +89,13 @@ export class ImageComponent implements OnInit, OnDestroy {
   }
 
   setError(error:any) {
-    let errorText = error.status + ":" + error.statusText;
-    if (error.status == 0 || error.statusText == "") {
-      errorText = "サーバー接続エラー";
+    console.log(error);
+    if (error.status == 403) {
+      //まだキャッシュがない結果なのでリトライする
+      setTimeout(() => {
+        this.showImage();
+      }, 1000);
+      return;
     }
   }
 
