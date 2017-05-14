@@ -1,26 +1,8 @@
 import { Component, OnInit, HostListener, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Response } from "@angular/http";
-import { FileService } from "../file.service"
+import { FileService, FileListResponse, FileListFileResponse } from "../file.service"
 import { PageService } from "../page.service"
-
-class FileListItem {
-  hash: string;
-  name: string;
-  image: string;
-  isdir: boolean;
-  page: number;
-  index: number;
-
-  constructor() {
-    this.hash = "";
-    this.name = "";
-    this.image = "";
-    this.isdir = false;
-    this.page = 0;
-    this.index = 0;
-  }
-}
 
 @Component({
   selector: 'app-filelist',
@@ -34,10 +16,8 @@ export class FilelistComponent implements OnInit {
   listItemCountMax = 10;  //1ページに表示する最大個数
 
   itemList = [];
-  upFolderItem: FileListItem = null;
+  upFolderItem: FileListFileResponse = null;
 
-  requestHash = "";
-  requestOffset = 0;
   responseAllCount = 0;
   responseFileCount = 0;
   nowPageCount = 0;
@@ -51,7 +31,7 @@ export class FilelistComponent implements OnInit {
 
   ngOnInit() {
     this.onScreenResize();
-    this.showFolderList("", 0);
+    this.showFolderList(this.fileService.getFolderHash(), this.fileService.getFolderOffset());
   }
 
   @HostListener("window:resize")
@@ -60,8 +40,6 @@ export class FilelistComponent implements OnInit {
   }
 
   showFolderList(hash:string, offset:number) {
-    this.requestHash = hash;
-    this.requestOffset = offset;
     this.itemList = [];
     this.fileService.postFileList(hash, offset, this.listItemCountMax).subscribe(
       res => {
@@ -73,31 +51,23 @@ export class FilelistComponent implements OnInit {
     );
   }
 
-  setSuccessPost(responce:Response) {
-    let json = responce.json();
-    this.title = json.name;
-    this.responseAllCount = json.allcount;
-    this.responseFileCount = json.count;
-    this.nowPageCount = Math.ceil(this.requestOffset / this.listItemCountMax) + 1;
+  setSuccessPost(res:FileListResponse) {
+    this.title = res.name;
+    this.responseAllCount = res.allcount;
+    this.responseFileCount = res.count;
+    this.nowPageCount = Math.ceil(this.fileService.getFolderOffset() / this.listItemCountMax) + 1;
     this.totalPageCount = Math.ceil(this.responseAllCount / this.listItemCountMax);
 
-    for (let item of json.files) {
+    for (let item of res.files) {
       //タイトルだけ先にセットする
       if (item.name == "..") {
         this.upFolderItem = item;
         continue;
       }
-      let newItem = new FileListItem();
-      newItem.hash = item.hash;
-      newItem.name = item.name;
-      newItem.isdir = item.isdir;
-      newItem.page = item.page;
-      newItem.index = item.index;
-      this.itemList.push(newItem);
-
+      this.itemList.push(item);
       this.fileService.getThumbnail(item.hash).subscribe(
         imageUrl => {
-          newItem.image = imageUrl;
+          item.image = imageUrl;
         },
         error => {
           this.setErrorPost(error);
@@ -113,7 +83,7 @@ export class FilelistComponent implements OnInit {
     }
   }
 
-  clickListItem(item: FileListItem) {
+  clickListItem(item: FileListFileResponse) {
     console.log("clickListItem name=" + item.name);
     if (item.isdir) {
       console.log("clickListItem folder!");
@@ -133,40 +103,40 @@ export class FilelistComponent implements OnInit {
   }
 
   jumpFirstPage() {
-    if (this.requestOffset == 0) {
+    if (this.fileService.getFolderOffset() == 0) {
       return;
     }
-    this.requestOffset = 0;
-    this.showFolderList(this.requestHash, this.requestOffset);
+    this.showFolderList(this.fileService.getFolderHash(), 0);
   }
 
   jumpPrevPage() {
-    if (this.requestOffset == 0) {
+    let offset = 0;
+    if (this.fileService.getFolderOffset() == 0) {
       return;
     }
-    else if (this.requestOffset < this.listItemCountMax) {
-      this.requestOffset = 0;
+    else if (this.fileService.getFolderOffset() < this.listItemCountMax) {
+      offset = 0;
     }
     else {
-      this.requestOffset -= this.listItemCountMax;
+      offset = this.fileService.getFolderOffset() - this.listItemCountMax;
     }
-    this.showFolderList(this.requestHash, this.requestOffset);
+    this.showFolderList(this.fileService.getFolderHash(), offset);
   }
 
   jumpNextPage() {
     if (this.nowPageCount == this.totalPageCount) {
       return;
     }
-    this.requestOffset += this.listItemCountMax;
-    this.showFolderList(this.requestHash, this.requestOffset);
+    let offset = this.fileService.getFolderOffset() + this.listItemCountMax;
+    this.showFolderList(this.fileService.getFolderHash(), offset);
   }
 
   jumpLastPage() {
     if (this.nowPageCount == this.totalPageCount) {
       return;
     }
-    this.requestOffset = (this.totalPageCount - 1) * this.listItemCountMax;
-    this.showFolderList(this.requestHash, this.requestOffset);
+    let offset = (this.totalPageCount - 1) * this.listItemCountMax;
+    this.showFolderList(this.fileService.getFolderHash(), offset);
   }
 
   showFolderMenu() {

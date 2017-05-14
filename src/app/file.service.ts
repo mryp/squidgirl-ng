@@ -14,10 +14,42 @@ namespace Const{
   export const API_SAVE_BOOK = "api/savebook";
 }
 
+export interface FileListResponse {
+  name: string;
+  allcount: number;
+  count: number;
+  files: FileListFileResponse[];
+}
+
+export interface FileListFileResponse {
+  hash: string;
+  name: string;
+  size: number;
+  page: number;
+  isdir: boolean;
+  modtime: string;
+  readtime: string;
+  index: number;
+  reaction: number;
+  image: string;
+}
+
 @Injectable()
 export class FileService {
   //フィールド
   //--------------------------------------
+  private folderHash = "";
+  private folderOffset = 0;
+
+  //プロパティ
+  //--------------------------------------
+  public getFolderHash():string {
+    return this.folderHash;
+  }
+
+  public getFolderOffset():number {
+    return this.folderOffset;
+  }
 
   //メソッド
   //--------------------------------------
@@ -47,13 +79,16 @@ export class FileService {
   /**
    * ファイル一覧を取得する
    */
-  postFileList(hash:string, offset:number, limit:number): Observable<Response> {
+  public postFileList(hash:string, offset:number, limit:number): Observable<FileListResponse> {
+    this.folderHash = hash;
+    this.folderOffset = offset;
+
     let postData = "hash=" + hash + "&offset=" + offset + "&limit=" + limit;
     let headers = this.createPostApiHeader();
     let options = new RequestOptions({headers: headers});
     return this.http.post(this.getApiUrl(Const.API_FILE_LIST), postData, options).map(
       res => {
-        return res;
+        return res.json() as FileListResponse;
       }
     );
   }
@@ -61,7 +96,7 @@ export class FileService {
   /**
    * 指定したファイルのサムネイル画像を取得する
    */
-  getThumbnail(hash:string): Observable<string> {
+  public getThumbnail(hash:string): Observable<string> {
     let url = this.getApiUrl(Const.API_THUMBNAIL) + "/" + hash + "?base64=true";
     let headers = this.createGetApiHeader();
     let options = new RequestOptions({headers: headers});
@@ -80,7 +115,7 @@ export class FileService {
   /**
    * 指定したファイル内のページ画像を取得する
    */
-  getPageImage(hash:string, index:number, maxHeight:number, maxWidth:number): Observable<string> {
+  public getPageImage(hash:string, index:number, maxHeight:number, maxWidth:number): Observable<string> {
     let url = this.getApiUrl(Const.API_PAGE) + "/" + hash
       + "?index="+index+"&maxheight="+maxHeight+"&maxwidth="+maxWidth+"&base64=true";
     let headers = this.createGetApiHeader();
@@ -97,7 +132,10 @@ export class FileService {
     );
   }
 
-  postSaveBook(hash:string, index:number, reaction:number): Observable<Response> {
+  /**
+   * 現在のページ情報を保存する
+   */
+  public postSaveBook(hash:string, index:number, reaction:number): Observable<Response> {
     let postData = "hash=" + hash + "&index=" + index + "&reaction=" + reaction;
     let headers = this.createPostApiHeader();
     let options = new RequestOptions({headers: headers});

@@ -27,7 +27,7 @@ export class ImageComponent implements OnInit, OnDestroy {
     console.log("ngOnDestroy");
     this.pageService.savePage().subscribe(
       response => {
-        console.log("ok:" + response.json())
+        console.log("ok:" + response.text())
       },
       error => {
         console.log(error.status + ":" + error.statusText);

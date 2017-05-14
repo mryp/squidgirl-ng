@@ -65,6 +65,7 @@ export class PageService {
   }
 
   savePage(): Observable<Response> {
+    console.log("this.index=" + this.index);
     return this.fileService.postSaveBook(this.hash, this.index, this.reaction)
   }
 }
