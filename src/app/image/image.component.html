@@ -32,6 +32,7 @@
   <div class="container-body image-z0" id="container-body">
     <div class="app-content">
       <img class="image-main" src="{{pageImage}}" (click)="clickImage($event)" />
+      <md-spinner class="image-progress" *ngIf="isImageDownload"></md-spinner>
     </div>
   </div>
 </div>

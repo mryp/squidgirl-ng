@@ -10,6 +10,7 @@ import { PageService } from "../page.service"
 })
 export class ImageComponent implements OnInit, OnDestroy {
   isVisibleToolbar = false;
+  isImageDownload = false;
   pageImage = "";
 
   constructor(
@@ -51,6 +52,10 @@ export class ImageComponent implements OnInit, OnDestroy {
   clickImage(event:any) {
     let mouseEvent = <MouseEvent>event;
     console.log("clickImage x=" + mouseEvent.x + " y=" + mouseEvent.y);
+    if (this.isImageDownload) {
+      console.log("画像取得中のため移動処理キャンセル");
+      return;
+    }
 
     let menuAreaHeight = innerHeight / 4;
     let pageChangeWidth = innerWidth / 2;
@@ -62,27 +67,30 @@ export class ImageComponent implements OnInit, OnDestroy {
     }
     else if (mouseEvent.x < pageChangeWidth)
     {
-      console.log("前へ移動");
       if (this.pageService.setPrevPage()) {
+        console.log("前へ移動");
         this.showImage();
       }
     }
     else
     {
-      console.log("次へ移動");
       if (this.pageService.setNextPage()) {
+        console.log("次へ移動");
         this.showImage();
       }
     }
   }
 
   showImage() {
+    this.isImageDownload = true;
     this.pageService.getPage().subscribe(
       imageUrl => {
+        this.isImageDownload = false;
         this.pageImage = imageUrl;
       },
       error => {
         this.setError(error);
+        this.isImageDownload = false;
         this.pageImage = "";
       }
     );
@@ -90,13 +98,6 @@ export class ImageComponent implements OnInit, OnDestroy {
 
   setError(error:any) {
     console.log(error);
-    if (error.status == 403) {
-      //まだキャッシュがない結果なのでリトライする
-      setTimeout(() => {
-        this.showImage();
-      }, 1000);
-      return;
-    }
   }
 
 }
