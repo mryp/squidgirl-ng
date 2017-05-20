@@ -38,7 +38,7 @@ export class ImageComponent implements OnInit, OnDestroy {
 
   @HostListener("window:resize")
   onScreenResize() {
-    this.pageService.setImageSize(innerHeight, innerWidth);
+    this.pageService.setImageSize(innerHeight, innerWidth, devicePixelRatio);
   }
 
   backToMenu() {

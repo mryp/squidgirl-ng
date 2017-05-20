@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: "http://www.poringsoft.net/go/squidgirl/",
+  apiBaseUrl: "http://192.168.0.10:9002/",
 };

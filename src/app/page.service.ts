@@ -29,9 +29,9 @@ export class PageService {
     this.index = index;
   }
 
-  setImageSize(height:number, width:number) {
-    this.maxHeight = height;
-    this.maxWidth = width;
+  setImageSize(height:number, width:number, devicePixelRatio:number) {
+    this.maxHeight = Math.floor(height * devicePixelRatio);
+    this.maxWidth = Math.floor(width * devicePixelRatio);
   }
 
   setReaction(reaction: number) {
