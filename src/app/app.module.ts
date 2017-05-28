@@ -16,6 +16,7 @@ import { SettingComponent } from './setting/setting.component';
 import { ImageComponent } from './image/image.component';
 import { FileService } from './file.service';
 import { PageService } from './page.service';
+import { UsersettingComponent } from './usersetting/usersetting.component';
 
 //ルーター
 const appRoutes = [
@@ -25,9 +26,12 @@ const appRoutes = [
     children: [
       { path: 'filelist', component: FilelistComponent, outlet: 'content' },
       { path: 'setting', component: SettingComponent, outlet: 'content' },
+      { path: 'usersetting', component: UsersettingComponent, outlet: 'content' },
     ]
   },
   { path: "image", component:ImageComponent },
+  { path: 'setting', component: SettingComponent },
+  { path: 'usersetting', component: UsersettingComponent },
 ]
 
 @NgModule({
@@ -38,6 +42,7 @@ const appRoutes = [
     FilelistComponent,
     SettingComponent,
     ImageComponent,
+    UsersettingComponent,
   ],
   imports: [
     BrowserModule,

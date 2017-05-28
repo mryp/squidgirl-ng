@@ -42,7 +42,7 @@ export class ImageComponent implements OnInit, OnDestroy {
   }
 
   backToMenu() {
-    this.router.navigate(["/"]);
+    this.router.navigate(['/list', { outlets: { content: 'filelist' } }]);
   }
 
   showOption() {

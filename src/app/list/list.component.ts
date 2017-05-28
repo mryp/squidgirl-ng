@@ -47,8 +47,14 @@ export class ListComponent implements OnInit {
   otherLinkList = [
     {
       title: '設定',
-      link: "/list",
-      content: "setting",
+      link: "/setting",
+      content: "",
+      icon: "settings",
+    },
+    {
+      title: 'ユーザー設定',
+      link: "/usersetting",
+      content: "",
       icon: "settings",
     },
   ];
@@ -74,7 +80,12 @@ export class ListComponent implements OnInit {
   jumpPage(title:string, link:string, content:string) {
     this.sidenav.close();
     this.title = title;
-    this.router.navigate([link, { outlets: { content: content } }]);
+    if (content !="") {
+      this.router.navigate([link, { outlets: { content: content } }]);
+    }
+    else {
+      this.router.navigate([link]);
+    }
   }
 
 }
