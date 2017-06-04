@@ -17,6 +17,7 @@ import { ImageComponent } from './image/image.component';
 import { FileService } from './file.service';
 import { PageService } from './page.service';
 import { UsersettingComponent } from './usersetting/usersetting.component';
+import { UserService } from './user.service';
 
 //ルーター
 const appRoutes = [
@@ -56,6 +57,7 @@ const appRoutes = [
     LoginService,
     FileService,
     PageService,
+    UserService,
   ],
   bootstrap: [AppComponent]
 })

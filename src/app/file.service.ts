@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from "@angular/http";
-import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
@@ -55,26 +54,8 @@ export class FileService {
   //--------------------------------------
   constructor(
     private loginService:LoginService,
-    private http:Http,
-    private sanitizer:DomSanitizer
+    private http:Http
   ) { }
-
-  private getApiUrl(apiName:string):string {
-    return environment.apiBaseUrl + apiName;
-  }
-
-  private createPostApiHeader():Headers {
-    return new Headers({
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Authorization": "Bearer " + this.loginService.getToken()
-    });
-  }
-
-  private createGetApiHeader():Headers {
-    return new Headers({
-      "Authorization": "Bearer " + this.loginService.getToken(),
-    });
-  }
 
   /**
    * ファイル一覧を取得する
@@ -84,9 +65,9 @@ export class FileService {
     this.folderOffset = offset;
 
     let postData = "hash=" + hash + "&offset=" + offset + "&limit=" + limit;
-    let headers = this.createPostApiHeader();
+    let headers = this.loginService.createPostApiHeader();
     let options = new RequestOptions({headers: headers});
-    return this.http.post(this.getApiUrl(Const.API_FILE_LIST), postData, options).map(
+    return this.http.post(this.loginService.getApiUrl(Const.API_FILE_LIST), postData, options).map(
       res => {
         return res.json() as FileListResponse;
       }
@@ -97,8 +78,8 @@ export class FileService {
    * 指定したファイルのサムネイル画像を取得する
    */
   public getThumbnail(hash:string): Observable<string> {
-    let url = this.getApiUrl(Const.API_THUMBNAIL) + "/" + hash + "?base64=true";
-    let headers = this.createGetApiHeader();
+    let url = this.loginService.getApiUrl(Const.API_THUMBNAIL) + "/" + hash + "?base64=true";
+    let headers = this.loginService.createGetApiHeader();
     let options = new RequestOptions({headers: headers});
     return this.http.get(url, options).map(
       res => {
@@ -116,9 +97,9 @@ export class FileService {
    * 指定したファイル内のページ画像を取得する
    */
   public getPageImage(hash:string, index:number, maxHeight:number, maxWidth:number): Observable<string> {
-    let url = this.getApiUrl(Const.API_PAGE) + "/" + hash
+    let url = this.loginService.getApiUrl(Const.API_PAGE) + "/" + hash
       + "?index="+index+"&maxheight="+maxHeight+"&maxwidth="+maxWidth+"&base64=true";
-    let headers = this.createGetApiHeader();
+    let headers = this.loginService.createGetApiHeader();
     let options = new RequestOptions({headers: headers});
     return this.http.get(url, options).map(
       res => {
@@ -137,9 +118,9 @@ export class FileService {
    */
   public postSaveBook(hash:string, index:number, reaction:number): Observable<Response> {
     let postData = "hash=" + hash + "&index=" + index + "&reaction=" + reaction;
-    let headers = this.createPostApiHeader();
+    let headers = this.loginService.createPostApiHeader();
     let options = new RequestOptions({headers: headers});
-    return this.http.post(this.getApiUrl(Const.API_SAVE_BOOK), postData, options).map(
+    return this.http.post(this.loginService.getApiUrl(Const.API_SAVE_BOOK), postData, options).map(
       res => {
         return res;
       }

@@ -6,15 +6,30 @@
     </button>
     <span class="header-title">ユーザー設定</span>
     <span class="header-spacer"></span>
-    <button md-icon-button (click)="saveSetting()">
-      <md-icon>save</md-icon>
+    <button md-icon-button [mdMenuTriggerFor]="menu">
+      <md-icon>more_vert</md-icon>
     </button>
+
+    <!-- メニュー -->
+    <md-menu #menu="mdMenu">
+      <button md-menu-item (click)="addUser()">
+        <md-icon>person_add</md-icon>
+        <span>ユーザー追加</span>
+      </button>
+    </md-menu>
   </md-toolbar>
 
   <!-- 画像表示 -->
   <div class="container-body">
     <div class="app-content">
-      <p>ユーザー設定</p>
+      <md-nav-list class="userlist-root">
+        <md-list-item *ngFor="let user of userList">
+          <a md-line (click)="selectUser(user.username)">{{user.username}}</a>
+          <button md-icon-button (click)="deleteUser(user.username)">
+            <md-icon>delete</md-icon>
+          </button>
+        </md-list-item>
+      </md-nav-list>
     </div>
   </div>
 </div>
