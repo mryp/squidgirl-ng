@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
       res => {
         let login = res.json();
         if (login.token != "") {
-          this.router.navigate(['/list', { outlets: { content: 'filelist' } }]);
+          this.router.navigate(['/list/file']);
         } else {
           this.setErrorMessage("トークン取得エラー");
         }

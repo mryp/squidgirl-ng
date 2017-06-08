@@ -25,9 +25,7 @@ const appRoutes = [
   { path: 'list',
     component:ListComponent,
     children: [
-      { path: 'filelist', component: FilelistComponent, outlet: 'content' },
-      { path: 'setting', component: SettingComponent, outlet: 'content' },
-      { path: 'usersetting', component: UsersettingComponent, outlet: 'content' },
+      { path: 'file', component: FilelistComponent },
     ]
   },
   { path: "image", component:ImageComponent },

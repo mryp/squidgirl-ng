@@ -17,14 +17,12 @@ export class ListComponent implements OnInit {
   categoryLinkList = [
     {
       title: 'フォルダ',
-      link: "/list",
-      content: "filelist",
+      link: "/list/file",
       icon: "folder_open",
     },
     {
       title: '履歴',
-      link: "/list",
-      content: "filelist",
+      link: "/list/file",
       icon: "history",
     },
   ];
@@ -32,14 +30,12 @@ export class ListComponent implements OnInit {
   reactionLinkList = [
     {
       title: '気に入った',
-      link: "/list",
-      content: "filelist",
+      link: "/list/file",
       icon: "thumb_up",
     },
     {
       title: 'いまいち',
-      link: "/list",
-      content: "filelist",
+      link: "/list/file",
       icon: "thumb_down",
     },
   ];
@@ -48,13 +44,11 @@ export class ListComponent implements OnInit {
     {
       title: '設定',
       link: "/setting",
-      content: "",
       icon: "settings",
     },
     {
       title: 'ユーザー設定',
       link: "/usersetting",
-      content: "",
       icon: "settings",
     },
   ];
@@ -77,15 +71,10 @@ export class ListComponent implements OnInit {
     this.sidenav.toggle();
   }
 
-  jumpPage(title:string, link:string, content:string) {
+  jumpPage(title:string, link:string) {
     this.sidenav.close();
     this.title = title;
-    if (content !="") {
-      this.router.navigate([link, { outlets: { content: content } }]);
-    }
-    else {
-      this.router.navigate([link]);
-    }
+    this.router.navigate([link]);
   }
 
 }
