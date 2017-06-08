@@ -19,6 +19,15 @@ md-card {
   margin: 16px;
 }
 
+.input-full-width {
+  width:100%
+}
+
+.input-content {
+  max-width: 320px;
+  margin: 16px auto;
+}
+
 .container-root {
   height: 100vh;
   display: flex;

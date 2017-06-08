@@ -24,7 +24,7 @@
     <div class="app-content">
       <md-nav-list class="userlist-root">
         <md-list-item *ngFor="let user of userList">
-          <a md-line (click)="selectUser(user.username)">{{user.username}}</a>
+          <p md-line>{{user.username}}</p>
           <button md-icon-button (click)="deleteUser(user.username)">
             <md-icon>delete</md-icon>
           </button>

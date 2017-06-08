@@ -41,4 +41,19 @@ export class UserService {
       }
     );
   }
+
+  public postCreateUser(userName:string, password:string, isAdmin:boolean) {
+    let authlevel = 1;
+    if (isAdmin) {
+      authlevel = 100;
+    }
+    let postData = "username=" + userName + "&password=" + password + "&authlevel=" + authlevel;
+    let headers = this.loginService.createPostApiHeader();
+    let options = new RequestOptions({headers: headers});
+    return this.http.post(this.loginService.getApiUrl(Const.API_CREATE_USER), postData, options).map(
+      res => {
+        return res;
+      }
+    );
+  }
 }

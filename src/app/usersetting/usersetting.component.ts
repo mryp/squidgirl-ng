@@ -22,7 +22,6 @@ export class UsersettingComponent implements OnInit {
     this.showUserList();
   }
 
-
   showUserList() {
     this.userList = [];
     this.userService.getUserList().subscribe(
@@ -49,22 +48,14 @@ export class UsersettingComponent implements OnInit {
   }
 
   cancelSetting() {
-    this.router.navigate(['/list', { outlets: { content: 'filelist' } }]);
-  }
-
-  saveSetting() {
-    this.router.navigate(['/list', { outlets: { content: 'filelist' } }]);
+    this.router.navigateByUrl('/list/file');
   }
 
   addUser() {
-
-  }
-
-  selectUser(userName:string) {
-
+    this.router.navigateByUrl('/useradd');
   }
 
   deleteUser(userName:string) {
-
+    console.log("deleteUser=" + userName);
   }
 }

@@ -14,9 +14,10 @@ import { LoginComponent } from './login/login.component';
 import { FilelistComponent } from './filelist/filelist.component';
 import { SettingComponent } from './setting/setting.component';
 import { ImageComponent } from './image/image.component';
+import { UsersettingComponent } from './usersetting/usersetting.component';
+import { UseraddComponent } from './useradd/useradd.component';
 import { FileService } from './file.service';
 import { PageService } from './page.service';
-import { UsersettingComponent } from './usersetting/usersetting.component';
 import { UserService } from './user.service';
 
 //ルーター
@@ -30,6 +31,7 @@ const appRoutes = [
   },
   { path: "image", component:ImageComponent },
   { path: 'setting', component: SettingComponent },
+  { path: 'useradd', component: UseraddComponent },
   { path: 'usersetting', component: UsersettingComponent },
 ]
 
@@ -42,6 +44,7 @@ const appRoutes = [
     SettingComponent,
     ImageComponent,
     UsersettingComponent,
+    UseraddComponent,
   ],
   imports: [
     BrowserModule,

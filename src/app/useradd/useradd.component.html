@@ -1,27 +1,26 @@
 <div class="container-root">
-  <!-- タイトルバー -->
+  <!-- ツールバー -->
   <md-toolbar color="primary" class="container-header shadow-toolbar">
-    <span>{{title}}</span>
+    <button md-icon-button (click)="cancel()">
+      <md-icon>arrow_back</md-icon>
+    </button>
+    <span class="header-title">ユーザー追加</span>
   </md-toolbar>
 
-  <md-sidenav-container class="container-body">
-    <!-- サイドメニュー -->
-    <md-sidenav #sidenav class="sidenavi-side">
-      <!-- メニューなし -->
-    </md-sidenav>
-
-    <!-- コンテンツ -->
+  <!-- 画像表示 -->
+  <div class="container-body">
     <div class="app-content">
       <md-card class="input-content">
         <md-card-content>
-          <form (ngSubmit)="loginStart()" #heroForm="ngForm">
+          <form (ngSubmit)="registStart()" #heroForm="ngForm">
             <md-input-container class="input-full-width">
               <input mdInput placeholder="ユーザー名" name="userName" [(ngModel)]="userName">
             </md-input-container>
             <md-input-container class="input-full-width">
               <input mdInput type="password" placeholder="パスワード" name="userPassword" [(ngModel)]="userPassword">
             </md-input-container>
-            <button type="submit" class="input-full-width" md-raised-button color="accent">ログイン</button>
+            <md-checkbox name="adminChecked" [(ngModel)]="adminChecked">管理者</md-checkbox>
+            <button type="submit" class="input-full-width submit-button" md-raised-button color="accent">追加</button>
           </form>
           <div *ngIf="isShowError">
             <p>{{errorMessage}}</p>
@@ -29,5 +28,5 @@
         </md-card-content>
       </md-card>
     </div>
-  </md-sidenav-container>
+  </div>
 </div>
