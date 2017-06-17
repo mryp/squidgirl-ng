@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 import { FileService } from "../file.service"
 import { UserService, UserListResponse } from '../user.service';
 
@@ -15,7 +16,8 @@ export class UsersettingComponent implements OnInit {
   constructor(
     private fileService:FileService,
     private userService:UserService,
-    private router: Router
+    private router: Router,
+    private dialog: MdDialog
   ) { }
 
   ngOnInit() {
@@ -57,5 +59,35 @@ export class UsersettingComponent implements OnInit {
 
   deleteUser(userName:string) {
     console.log("deleteUser=" + userName);
+    let dialogRef = this.dialog.open(UsersettingDeleteDialog, {
+      data: userName,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == "yes") {
+        //削除
+        this.postDeleteUser(userName);
+      }
+    });
   }
+
+  postDeleteUser(userName:string) {
+    this.userService.postDeleteUser(userName).subscribe(
+      res => {
+        this.showUserList();
+      },
+      error => {
+        this.setUserListError(error);
+      }
+    );
+  }
+}
+
+@Component({
+  selector: 'app-usersetting-delete-dialog',
+  templateUrl: './usersetting.deletedialog.html',
+})
+export class UsersettingDeleteDialog {
+  constructor(@Inject(MD_DIALOG_DATA) public data: any,
+    public dialogRef: MdDialogRef<UsersettingDeleteDialog>
+  ) { }
 }

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '@angular/material';
+import { MaterialModule, MdDialogModule } from '@angular/material';
 import { RouterModule, Routes } from '@angular/router';
 import 'hammerjs';
 
@@ -14,7 +14,7 @@ import { LoginComponent } from './login/login.component';
 import { FilelistComponent } from './filelist/filelist.component';
 import { SettingComponent } from './setting/setting.component';
 import { ImageComponent } from './image/image.component';
-import { UsersettingComponent } from './usersetting/usersetting.component';
+import { UsersettingComponent, UsersettingDeleteDialog } from './usersetting/usersetting.component';
 import { UseraddComponent } from './useradd/useradd.component';
 import { FileService } from './file.service';
 import { PageService } from './page.service';
@@ -45,6 +45,7 @@ const appRoutes = [
     ImageComponent,
     UsersettingComponent,
     UseraddComponent,
+    UsersettingDeleteDialog,
   ],
   imports: [
     BrowserModule,
@@ -53,12 +54,16 @@ const appRoutes = [
     BrowserAnimationsModule,
     MaterialModule,
     RouterModule.forRoot(appRoutes),
+    MdDialogModule,
   ],
   providers: [
     LoginService,
     FileService,
     PageService,
     UserService,
+  ],
+  entryComponents: [
+    UsersettingDeleteDialog
   ],
   bootstrap: [AppComponent]
 })

@@ -56,4 +56,16 @@ export class UserService {
       }
     );
   }
+
+  public postDeleteUser(userName:string) {
+    let postData = "username=" + userName;
+    let headers = this.loginService.createPostApiHeader();
+    let options = new RequestOptions({headers: headers});
+    return this.http.post(this.loginService.getApiUrl(Const.API_DELETE_USER), postData, options).map(
+      res => {
+        return res;
+      }
+    );
+  }
+
 }
