@@ -1,8 +1,10 @@
 import { Component, OnInit, HostListener, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Response } from "@angular/http";
+
 import { FileService, FileListResponse, FileListFileResponse } from "../file.service"
 import { PageService } from "../page.service"
+import { EnvOption } from "../envoption";
 
 @Component({
   selector: 'app-filelist',
@@ -13,7 +15,7 @@ export class FilelistComponent implements OnInit {
   title = "";
   listColumn = 2;         //列数（画面サイズ・画像サイズから計算する）
   listItemWidthMin = 160; //画像の横幅
-  listItemCountMax = 10;  //1ページに表示する最大個数
+  listItemCountMax = 12;  //1ページに表示する最大個数
 
   itemList = [];
   upFolderItem: FileListFileResponse = null;
@@ -30,13 +32,22 @@ export class FilelistComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.onScreenResize();
+    this.setListColumn(window.innerWidth);
     this.showFolderList(this.fileService.getFolderHash(), this.fileService.getFolderOffset());
   }
 
-  @HostListener("window:resize")
-  onScreenResize() {
-    this.listColumn = innerWidth / this.listItemWidthMin;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setListColumn(event.target.innerWidth);
+  }
+
+  setListColumn(width:number) {
+    let contentWidth:number = width;
+    if (window.innerWidth >= EnvOption.WINDOW_WIDTH_TABLET) {
+      //メニューを常に表示しているのでメニューの横幅を省く
+      contentWidth -= EnvOption.MENU_WIDTH;
+    }
+    this.listColumn = contentWidth / this.listItemWidthMin;
   }
 
   showFolderList(hash:string, offset:number) {

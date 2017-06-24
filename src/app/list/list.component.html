@@ -1,38 +1,41 @@
-<div class="container-root">
-  <!-- タイトルバー -->
-  <md-toolbar color="primary" class="container-header shadow-toolbar">
-    <button md-icon-button (click)="sideNaviToggle()">
-      <md-icon>{{menuIcon}}</md-icon>
-    </button>
-    <span>{{title}}</span>
-  </md-toolbar>
+<md-sidenav-container>
+  <md-sidenav #sidenav mode="{{sidenaviMode}}" opened="{{sidenaviOpened}}" class="sidenavi-menu">
+    <md-nav-list class="sidenavi-menu-list">
+      <md-toolbar color="primary" class="shadow-toolbar">
+        <button *ngIf="sidenaviIconVisible" md-icon-button (click)="sideNaviToggle()">
+          <md-icon>arrow_back</md-icon>
+        </button>
+        <span>{{appName}}</span>
+      </md-toolbar>
+      <md-list-item *ngFor="let item of categoryLinkList" (click)="jumpPage(item.title, item.link)">
+        <md-icon md-list-icon>{{item.icon}}</md-icon>
+        <p md-line>{{item.title}}</p>
+      </md-list-item>
+      <md-divider></md-divider>
+      <md-list-item *ngFor="let item of reactionLinkList" (click)="jumpPage(item.title, item.link)">
+        <md-icon md-list-icon>{{item.icon}}</md-icon>
+        <p md-line>{{item.title}}</p>
+      </md-list-item>
+      <md-divider></md-divider>
+      <md-list-item *ngFor="let item of otherLinkList" (click)="jumpPage(item.title, item.link)">
+        <md-icon md-list-icon>{{item.icon}}</md-icon>
+        <p md-line>{{item.title}}</p>
+      </md-list-item>
+    </md-nav-list>
+  </md-sidenav>
 
-  <md-sidenav-container class="container-body">
-    <!-- サイドメニュー -->
-    <md-sidenav #sidenav class="sidenavi-side"
-      (open-start)="sideNaviOpenStart()"
-      (close-start)="sideNaviCloseStart()">
-      <md-nav-list class="sidenavi-itemlist">
-        <md-list-item *ngFor="let item of categoryLinkList" (click)="jumpPage(item.title, item.link)">
-          <md-icon md-list-icon>{{item.icon}}</md-icon>
-          <p md-line>{{item.title}}</p>
-        </md-list-item>
-        <md-divider></md-divider>
-        <md-list-item *ngFor="let item of reactionLinkList" (click)="jumpPage(item.title, item.link)">
-          <md-icon md-list-icon>{{item.icon}}</md-icon>
-          <p md-line>{{item.title}}</p>
-        </md-list-item>
-        <md-divider></md-divider>
-        <md-list-item *ngFor="let item of otherLinkList" (click)="jumpPage(item.title, item.link)">
-          <md-icon md-list-icon>{{item.icon}}</md-icon>
-          <p md-line>{{item.title}}</p>
-        </md-list-item>
-      </md-nav-list>
-    </md-sidenav>
+  <div class="container-root">
+    <div class="container-header">
+      <md-toolbar color="primary" class="shadow-toolbar">
+        <button *ngIf="sidenaviIconVisible" md-icon-button (click)="sideNaviToggle()">
+          <md-icon>menu</md-icon>
+        </button>
+        <span>{{title}}</span>
+      </md-toolbar>
+    </div>
 
-    <!-- コンテンツ -->
-    <div class="app-content">
+    <div class="container-body">
       <router-outlet></router-outlet>
     </div>
-  </md-sidenav-container>
-</div>
+  </div>
+</md-sidenav-container>

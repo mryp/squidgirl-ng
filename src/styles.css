@@ -52,19 +52,18 @@ md-card {
 .container-body {
   background : none;
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: auto;
 }
 
 .app-content {
   padding: 0px;
 }
 
-.sidenavi-side {
+.sidenavi-menu {
   padding: 0px;
-  width: 300px;
+  width: 240px;
 }
 
-.sidenavi-itemlist {
-  padding: 16px 0px 0px 0px;
+.sidenavi-menu-list {
+  margin-top: -8px;
 }

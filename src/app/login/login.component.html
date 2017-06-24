@@ -1,33 +1,26 @@
 <div class="container-root">
-  <!-- タイトルバー -->
-  <md-toolbar color="primary" class="container-header shadow-toolbar">
-    <span>{{title}}</span>
-  </md-toolbar>
+  <div class="container-header">
+    <md-toolbar color="primary" class="shadow-toolbar">
+      <span>{{title}}</span>
+    </md-toolbar>
+  </div>
 
-  <md-sidenav-container class="container-body">
-    <!-- サイドメニュー -->
-    <md-sidenav #sidenav class="sidenavi-side">
-      <!-- メニューなし -->
-    </md-sidenav>
-
-    <!-- コンテンツ -->
-    <div class="app-content">
-      <md-card class="input-content">
-        <md-card-content>
-          <form (ngSubmit)="loginStart()" #heroForm="ngForm">
-            <md-input-container class="input-full-width">
-              <input mdInput placeholder="ユーザー名" name="userName" [(ngModel)]="userName">
-            </md-input-container>
-            <md-input-container class="input-full-width">
-              <input mdInput type="password" placeholder="パスワード" name="userPassword" [(ngModel)]="userPassword">
-            </md-input-container>
-            <button type="submit" class="input-full-width" md-raised-button color="accent">ログイン</button>
-          </form>
-          <div *ngIf="isShowError">
-            <p>{{errorMessage}}</p>
-          </div>
-        </md-card-content>
-      </md-card>
-    </div>
-  </md-sidenav-container>
+  <div class="container-body">
+    <md-card class="input-content">
+      <md-card-content>
+        <form (ngSubmit)="loginStart()" #heroForm="ngForm">
+          <md-input-container class="input-full-width">
+            <input mdInput placeholder="ユーザー名" name="userName" [(ngModel)]="userName">
+          </md-input-container>
+          <md-input-container class="input-full-width">
+            <input mdInput type="password" placeholder="パスワード" name="userPassword" [(ngModel)]="userPassword">
+          </md-input-container>
+          <button type="submit" class="input-full-width" md-raised-button color="accent">ログイン</button>
+        </form>
+        <div *ngIf="isShowError">
+          <p>{{errorMessage}}</p>
+        </div>
+      </md-card-content>
+    </md-card>
+  </div>
 </div>

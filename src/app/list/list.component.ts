@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { MdSidenav } from '@angular/material';
 
 import { LoginService } from "../login.service"
+import { EnvOption } from "../envoption";
 
 @Component({
   selector: 'app-list',
@@ -11,7 +12,11 @@ import { LoginService } from "../login.service"
 })
 export class ListComponent implements OnInit {
   title = 'フォルダ';
-  menuIcon = "menu";
+  appName = EnvOption.APP_NAME;
+
+  sidenaviMode = 'over';
+  sidenaviOpened = false;
+  sidenaviIconVisible = true;
   @ViewChild('sidenav') sidenav: MdSidenav; //#sidenav オブジェクトを読み込むため設定
 
   categoryLinkList = [
@@ -59,20 +64,35 @@ export class ListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.setSidenavi(window.innerWidth);
   }
 
-  sideNaviOpenStart() {
-    this.menuIcon = "arrow_back";
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setSidenavi(event.target.innerWidth);
   }
-  sideNaviCloseStart() {
-    this.menuIcon = "menu";
+
+  setSidenavi(windowSize:number) {
+    console.log("setSidenavi size=" + windowSize);
+    if (windowSize < EnvOption.WINDOW_WIDTH_TABLET) {
+      this.sidenaviMode = 'over';
+      this.sidenaviOpened = false;
+      this.sidenaviIconVisible = true;
+    } else {
+      this.sidenaviMode = 'side';
+      this.sidenaviOpened = true;
+      this.sidenaviIconVisible = false;
+    }
   }
+
   sideNaviToggle() {
     this.sidenav.toggle();
   }
 
   jumpPage(title:string, link:string) {
-    this.sidenav.close();
+    if (this.sidenaviIconVisible) {
+      this.sidenav.close();
+    }
     this.title = title;
     this.router.navigate([link]);
   }
