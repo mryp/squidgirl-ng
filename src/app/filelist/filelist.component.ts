@@ -1,17 +1,24 @@
 import { Component, OnInit, HostListener, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Response } from "@angular/http";
 
 import { FileService, FileListResponse, FileListFileResponse } from "../file.service"
 import { PageService } from "../page.service"
 import { EnvOption } from "../envoption";
 
+export interface TitleItem {
+  title: string;
+  hash: string;
+}
+
 @Component({
   selector: 'app-filelist',
   templateUrl: './filelist.component.html',
-  styleUrls: ['./filelist.component.css']
+  styleUrls: ['./filelist.component.css'],
 })
 export class FilelistComponent implements OnInit {
+  folderHash = "";
+  folderOffset = 0;
   title = "";
   listColumn = 2;         //列数（画面サイズ・画像サイズから計算する）
   listItemWidthMin = 160; //画像の横幅
@@ -25,15 +32,41 @@ export class FilelistComponent implements OnInit {
   nowPageCount = 0;
   totalPageCount = 0;
 
+  titleList:TitleItem[] = [];
+
   constructor(
     private fileService:FileService,
     private pageService:PageService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    route.params.subscribe(params => {
+      //ページ切り替えのたびにパラメータを設定する
+      let hash = params['hash'];
+      let offset = +params['offset'];
+      let isChangeFolder = false;
+      let isChangeTitle = false;
+      if (hash != this.folderHash || offset != this.folderOffset) {
+        isChangeFolder = true;
+      }
+      if (hash != this.folderHash) {
+        isChangeTitle = true;
+      }
+
+      //更新があったデータだけ再取得を行う
+      this.folderHash = hash;
+      this.folderOffset = offset;
+      if (isChangeFolder) {
+        this.showFolderList(this.folderHash, this.folderOffset);
+      }
+      if (isChangeTitle) {
+        this.showTitleList(this.folderHash);
+      }
+    });
+  }
 
   ngOnInit() {
     this.setListColumn(window.innerWidth);
-    this.showFolderList(this.fileService.getFolderHash(), this.fileService.getFolderOffset());
   }
 
   @HostListener('window:resize', ['$event'])
@@ -62,11 +95,28 @@ export class FilelistComponent implements OnInit {
     );
   }
 
+  showTitleList(hash:string) {
+    this.titleList = [];
+    this.fileService.postParentList(hash).subscribe(
+      res => {
+        let list:TitleItem[] = [];
+        for (let item of res.folders) {
+          list.push({title: item.name, hash: item.hash});
+        }
+
+        this.titleList = list.reverse();
+      },
+      error => {
+        this.titleList.push({title: "ERROR", hash: "root"});
+      }
+    );
+  }
+
   setSuccessPost(res:FileListResponse) {
     this.title = res.name;
     this.responseAllCount = res.allcount;
     this.responseFileCount = res.count;
-    this.nowPageCount = Math.ceil(this.fileService.getFolderOffset() / this.listItemCountMax) + 1;
+    this.nowPageCount = Math.ceil(this.folderOffset / this.listItemCountMax) + 1;
     this.totalPageCount = Math.ceil(this.responseAllCount / this.listItemCountMax);
 
     for (let item of res.files) {
@@ -97,8 +147,8 @@ export class FilelistComponent implements OnInit {
   clickListItem(item: FileListFileResponse) {
     console.log("clickListItem name=" + item.name);
     if (item.isdir) {
-      console.log("clickListItem folder!");
-      this.showFolderList(item.hash, 0);
+      console.log("clickListItem folder=" + item.hash);
+      this.router.navigate(['/list/folder', item.hash, 0]);
     }
     else {
       console.log("clickListItem file! index=" + item.index)
@@ -107,39 +157,37 @@ export class FilelistComponent implements OnInit {
     }
   }
 
-  jumpUpFolder() {
-    if (this.upFolderItem != null) {
-      this.clickListItem(this.upFolderItem);
-    }
+  jumpFolder(hash:string) {
+    this.router.navigate(['/list/folder', hash, 0]);
   }
 
   jumpFirstPage() {
-    if (this.fileService.getFolderOffset() == 0) {
+    if (this.folderOffset == 0) {
       return;
     }
-    this.showFolderList(this.fileService.getFolderHash(), 0);
+    this.router.navigate(['/list/folder', this.folderHash, 0]);
   }
 
   jumpPrevPage() {
     let offset = 0;
-    if (this.fileService.getFolderOffset() == 0) {
+    if (this.folderOffset == 0) {
       return;
     }
-    else if (this.fileService.getFolderOffset() < this.listItemCountMax) {
+    else if (this.folderOffset < this.listItemCountMax) {
       offset = 0;
     }
     else {
-      offset = this.fileService.getFolderOffset() - this.listItemCountMax;
+      offset = this.folderOffset - this.listItemCountMax;
     }
-    this.showFolderList(this.fileService.getFolderHash(), offset);
+    this.router.navigate(['/list/folder', this.folderHash, offset]);
   }
 
   jumpNextPage() {
     if (this.nowPageCount == this.totalPageCount) {
       return;
     }
-    let offset = this.fileService.getFolderOffset() + this.listItemCountMax;
-    this.showFolderList(this.fileService.getFolderHash(), offset);
+    let offset = this.folderOffset + this.listItemCountMax;
+    this.router.navigate(['/list/folder', this.folderHash, offset]);
   }
 
   jumpLastPage() {
@@ -147,10 +195,6 @@ export class FilelistComponent implements OnInit {
       return;
     }
     let offset = (this.totalPageCount - 1) * this.listItemCountMax;
-    this.showFolderList(this.fileService.getFolderHash(), offset);
-  }
-
-  showFolderMenu() {
-    //未実装
+    this.router.navigate(['/list/folder', this.folderHash, offset]);
   }
 }

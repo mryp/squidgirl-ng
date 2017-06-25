@@ -8,6 +8,7 @@ import { environment } from '../environments/environment';
 
 namespace Const{
   export const API_FILE_LIST = "api/filelist";
+  export const API_PARENT_LIST = "api/parentlist";
   export const API_THUMBNAIL = "api/thumbnail";
   export const API_PAGE = "api/page";
   export const API_SAVE_BOOK = "api/savebook";
@@ -31,6 +32,16 @@ export interface FileListFileResponse {
   index: number;
   reaction: number;
   image: string;
+}
+
+export interface ParentListResponse {
+  count: number;
+  folders: ParentListFolderResponse[];
+}
+
+export interface ParentListFolderResponse {
+  hash: string;
+  name: string;
 }
 
 @Injectable()
@@ -61,6 +72,9 @@ export class FileService {
    * ファイル一覧を取得する
    */
   public postFileList(hash:string, offset:number, limit:number): Observable<FileListResponse> {
+    if (hash == "root") {
+      hash = "";
+    }
     this.folderHash = hash;
     this.folderOffset = offset;
 
@@ -73,6 +87,22 @@ export class FileService {
       }
     );
   }
+
+
+  public postParentList(hash:string): Observable<ParentListResponse> {
+    if (hash == "root") {
+      hash = "";
+    }
+    let postData = "hash=" + hash;
+    let headers = this.loginService.createPostApiHeader();
+    let options = new RequestOptions({headers: headers});
+    return this.http.post(this.loginService.getApiUrl(Const.API_PARENT_LIST), postData, options).map(
+      res => {
+        return res.json() as ParentListResponse;
+      }
+    );
+  }
+
 
   /**
    * 指定したファイルのサムネイル画像を取得する

@@ -30,7 +30,31 @@
         <button *ngIf="sidenaviIconVisible" md-icon-button (click)="sideNaviToggle()">
           <md-icon>menu</md-icon>
         </button>
-        <span>{{title}}</span>
+        <span class="header-title">{{title}}</span>
+        <span class="header-spacer"></span>
+        <button md-icon-button [mdMenuTriggerFor]="menu">
+          <md-icon>more_vert</md-icon>
+        </button>
+
+        <!-- メニュー -->
+        <md-menu #menu="mdMenu">
+          <button md-menu-item>
+            <md-icon>folder_special</md-icon>
+            <span>お気に入り</span>
+          </button>
+          <button md-menu-item>
+            <md-icon>sort</md-icon>
+            <span>並び替え</span>
+          </button>
+          <button md-menu-item>
+            <md-icon>photo_size_select_large</md-icon>
+            <span>画像サイズ変更</span>
+          </button>
+          <button md-menu-item>
+            <md-icon>view_module</md-icon>
+            <span>取得個数変更</span>
+          </button>
+        </md-menu>
       </md-toolbar>
     </div>
 

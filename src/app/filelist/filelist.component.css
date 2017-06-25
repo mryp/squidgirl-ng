@@ -74,3 +74,15 @@
   overflow:hidden;
   text-overflow:ellipsis;
 }
+
+.title-toolbar {
+  overflow: auto;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+.title-toolbar-item {
+  display: flex;
+  align-items: center;
+}

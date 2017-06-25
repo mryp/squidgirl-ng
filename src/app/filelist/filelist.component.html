@@ -1,38 +1,10 @@
-<md-card class="grid-heder">
-  <md-card-content div class="flex-block">
-    <div>
-      <button md-icon-button (click)="jumpUpFolder()">
-        <md-icon>arrow_upward</md-icon>
-      </button>
-    </div>
-    <div class="flex-cell-text">
-      <span>{{title}}</span>
-    </div>
-    <div>
-      <button md-icon-button [mdMenuTriggerFor]="menu">
-        <md-icon>more_vert</md-icon>
-      </button>
-      <md-menu #menu="mdMenu">
-        <button md-menu-item>
-          <md-icon>folder_special</md-icon>
-          <span>お気に入り</span>
-        </button>
-        <button md-menu-item>
-          <md-icon>sort</md-icon>
-          <span>並び替え</span>
-        </button>
-        <button md-menu-item>
-          <md-icon>photo_size_select_large</md-icon>
-          <span>画像サイズ変更</span>
-        </button>
-        <button md-menu-item>
-          <md-icon>view_module</md-icon>
-          <span>取得個数変更</span>
-        </button>
-      </md-menu>
-    </div>
-  </md-card-content>
-</md-card>
+<md-toolbar color="primary" class="shadow-toolbar title-toolbar">
+  <div *ngFor="let titleItem of titleList; let i = index" class="title-toolbar-item">
+    <md-icon *ngIf="i!=0">chevron_right</md-icon>
+    <button md-button (click)="jumpFolder(titleItem.hash)">{{titleItem.title}}</button>
+  </div>
+</md-toolbar>
+
 <div class="grid-content">
   <md-grid-list cols="{{listColumn}}" rowHeight="3:4" gutterSize="8px">
     <md-grid-tile *ngFor="let item of itemList" class="shadow-card">

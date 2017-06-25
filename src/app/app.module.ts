@@ -26,7 +26,7 @@ const appRoutes = [
   { path: 'list',
     component:ListComponent,
     children: [
-      { path: 'file', component: FilelistComponent },
+      { path: 'folder/:hash/:offset', component: FilelistComponent },
     ]
   },
   { path: "image", component:ImageComponent },

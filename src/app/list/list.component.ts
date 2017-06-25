@@ -22,12 +22,12 @@ export class ListComponent implements OnInit {
   categoryLinkList = [
     {
       title: 'フォルダ',
-      link: "/list/file",
+      link: "/list/folder/root/0",
       icon: "folder_open",
     },
     {
       title: '履歴',
-      link: "/list/file",
+      link: "/list/folder/root/0",
       icon: "history",
     },
   ];
@@ -35,12 +35,12 @@ export class ListComponent implements OnInit {
   reactionLinkList = [
     {
       title: '気に入った',
-      link: "/list/file",
+      link: "/list/folder/root/0",
       icon: "thumb_up",
     },
     {
       title: 'いまいち',
-      link: "/list/file",
+      link: "/list/folder/root/0",
       icon: "thumb_down",
     },
   ];
